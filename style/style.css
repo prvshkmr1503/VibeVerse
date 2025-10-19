@@ -1,0 +1,478 @@
+/* ================================
+   VibeVerse • style.css
+   Modern glass UI + video background
+   ================================ */
+
+:root {
+    --bg: #0b1020;
+    --text: #eaf2ff;
+    --muted: #b7c3d9;
+    --surface: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.16);
+    --accent: #8b5cf6;
+    --accent-2: #22d3ee;
+    --success: #34d399;
+    --danger: #ef4444;
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --radius: 18px;
+}
+
+body.light {
+    --bg: #f7f9ff;
+    --text: #101426;
+    --muted: #4a5877;
+    --surface: rgba(255, 255, 255, 0.7);
+    --border: rgba(10, 15, 30, 0.08);
+    --accent: #6d28d9;
+    --accent-2: #0891b2;
+    --shadow: 0 16px 40px rgba(20, 30, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================
+   Background layers
+   ================================ */
+#bg-wrap {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -3;
+}
+
+#bgVideo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.05) contrast(1.05) brightness(0.85);
+    transform: scale(1.02);
+    transition: opacity 400ms ease;
+    opacity: 1;
+}
+
+#bgImage {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    /* JS toggles between video/image */
+    transition: opacity 400ms ease;
+}
+
+#bgOverlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(1200px 800px at 10% 10%, rgba(139, 92, 246, 0.26), transparent 60%),
+        radial-gradient(900px 700px at 90% 20%, rgba(34, 211, 238, 0.22), transparent 60%),
+        radial-gradient(1000px 900px at 50% 100%, rgba(99, 102, 241, 0.18), transparent 60%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.7));
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    #bgVideo,
+    #bgImage {
+        transition: none;
+    }
+}
+
+/* ================================
+   App Shell
+   ================================ */
+.app-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 22px;
+    background: linear-gradient(180deg, rgba(5, 10, 25, 0.65), rgba(5, 10, 25, 0.2), transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    z-index: 5;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    opacity: 0.9;
+}
+
+.brand-name {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.top-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ================================
+   Buttons
+   ================================ */
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 120ms ease, background 160ms ease, border-color 160ms ease, opacity 160ms ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+    opacity: 0.9;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    border: none;
+}
+
+.btn.ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+}
+
+.btn.small {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.icon-btn .icon {
+    font-size: 18px;
+}
+
+/* ================================
+   Main & Quote Card
+   ================================ */
+.main {
+    min-height: calc(100dvh - 76px);
+    display: grid;
+    place-items: center;
+    padding: 32px 18px 60px;
+}
+
+.card {
+    width: min(820px, 92vw);
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 28px clamp(18px, 4vw, 36px);
+    position: relative;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.quote-card {
+    text-align: center;
+}
+
+.quote-mark {
+    position: absolute;
+    top: -26px;
+    left: 24px;
+    font-size: 90px;
+    line-height: 1;
+    opacity: 0.12;
+    user-select: none;
+    pointer-events: none;
+}
+
+blockquote {
+    margin: 0;
+    font-size: clamp(22px, 2.6vw, 34px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-wrap: pretty;
+}
+
+.quote-meta {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ================================
+   Controls (BG toggle etc.)
+   ================================ */
+.controls {
+    margin-top: 18px;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+}
+
+.control-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.status {
+    min-height: 20px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* ================================
+   Slide Panels (Add & Favorites)
+   ================================ */
+.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(520px, 92vw);
+    height: 100dvh;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
+    transform: translateX(100%);
+    transition: transform 280ms ease;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.panel[aria-hidden="false"] {
+    transform: translateX(0);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-body {
+    padding: 18px;
+    overflow: auto;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.field span {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+textarea,
+input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--text);
+    outline: none;
+}
+
+body.light textarea,
+body.light input[type="text"] {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: #9fb0c7;
+}
+
+.panel-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Favorites list */
+.fav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.fav-list li {
+    padding: 14px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.15);
+    display: grid;
+    gap: 6px;
+}
+
+body.light .fav-list li {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.fav-list .meta {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.fav-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    padding: 26px 12px 36px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Noscript */
+.noscript {
+    margin: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fffbeb;
+    color: #7c4a00;
+    border: 1px solid #f7e2a2;
+}
+
+/* ================================
+   Utility
+   ================================ */
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 1px, 1px);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 520px) {
+    .brand-name {
+        font-size: 18px;
+    }
+
+    .card {
+        padding: 24px 16px;
+    }
+
+    .btn {
+        padding: 9px 12px;
+    }
+
+    blockquote {
+        font-size: clamp(20px, 6vw, 28px);
+    }
+}
+
+/* Optional fun hover glow */
+.btn.primary:hover {
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25), 0 0 0 8px rgba(34, 211, 238, 0.2);
+}
+
+/* When using image fallback as main background */
+body.image-bg #bgVideo {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.image-bg #bgImage {
+    opacity: 1;
+}
+
+/* Optional: blur header when panels open (set on body in JS) */
+body.panel-open .app-header {
+    backdrop-filter: blur(12px) brightness(0.95);
+}

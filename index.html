@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VibeVerse — Instant Affirmations</title>
+
+    <!-- Fonts (optional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="style/style.css" />
+
+    <meta name="description" content="VibeVerse — A new spark of motivation with every refresh." />
+    <meta name="theme-color" content="#0b1020" />
+</head>
+
+<body>
+    <!-- Background Layer -->
+    <div id="bg-wrap" aria-hidden="true">
+        <!-- Video background (playlist handled in JS). Use your local files in assets/Videos/ -->
+        <video id="bgVideo" playsinline muted autoplay preload="auto"
+            poster="assets/images/fallback-poster.jpg"></video>
+        <!-- Optional image fallback layer (JS will toggle visibility as needed) -->
+        <div id="bgImage"></div>
+        <!-- Readability overlay -->
+        <div id="bgOverlay"></div>
+    </div>
+
+    <!-- App Shell -->
+    <header class="app-header">
+        <div class="brand">
+            <img src="assets/icons/app-icon.svg" alt="" class="brand-icon" />
+            <h1 class="brand-name">VibeVerse</h1>
+        </div>
+
+        <nav class="top-actions" aria-label="App actions">
+            <button id="toggleThemeBtn" class="icon-btn" title="Toggle light/dark mode" aria-label="Toggle theme">
+                <span class="icon" aria-hidden="true">🌓</span>
+            </button>
+            <button id="openFavoritesBtn" class="icon-btn" title="Open favorites" aria-controls="favoritesPanel"
+                aria-expanded="false">
+                <span class="icon" aria-hidden="true">❤️</span>
+            </button>
+            <button id="openAddBtn" class="btn small" aria-controls="addPanel" aria-expanded="false">Add Quote</button>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="card quote-card" aria-live="polite">
+            <div class="quote-mark" aria-hidden="true">“</div>
+            <blockquote id="quoteText">Loading your next affirmation…</blockquote>
+            <footer id="quoteMeta" class="quote-meta">—</footer>
+
+            <div class="actions">
+                <button id="newQuoteBtn" class="btn primary">New Quote</button>
+                <button id="favBtn" class="btn ghost" title="Add to favorites" aria-pressed="false">
+                    <span class="icon" aria-hidden="true">❤️</span><span class="btn-text">Favorite</span>
+                </button>
+                <button id="copyBtn" class="btn ghost" title="Copy to clipboard">
+                    <span class="icon" aria-hidden="true">📋</span><span class="btn-text">Copy</span>
+                </button>
+                <button id="shareBtn" class="btn ghost" title="Share">
+                    <span class="icon" aria-hidden="true">📤</span><span class="btn-text">Share</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Background controls -->
+        <section class="controls">
+            <div class="control-group">
+                <button id="nextBGBtn" class="btn" title="Next background">Next Background</button>
+                <button id="toggleBGModeBtn" class="btn ghost" title="Toggle video/image background"
+                    aria-pressed="true">
+                    Video: On
+                </button>
+            </div>
+            <div class="status" id="statusBar" role="status" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <!-- Slide-over: Add Quote -->
+    <aside id="addPanel" class="panel" aria-hidden="true" aria-labelledby="addPanelTitle">
+        <div class="panel-header">
+            <h2 id="addPanelTitle">Add Your Affirmation</h2>
+            <button class="icon-btn" id="closeAddBtn" aria-label="Close add panel">✕</button>
+        </div>
+        <form id="addForm" class="panel-body">
+            <label class="field">
+                <span>Affirmation / Quote</span>
+                <textarea id="addInput" rows="4" placeholder="Type an uplifting line you want to see again…"
+                    required></textarea>
+            </label>
+            <label class="field">
+                <span>Source (optional)</span>
+                <input id="addSource" type="text" placeholder="e.g., You / Author / Unknown" />
+            </label>
+            <div class="panel-actions">
+                <button type="submit" id="addBtn" class="btn primary">Save</button>
+            </div>
+        </form>
+    </aside>
+
+    <!-- Slide-over: Favorites -->
+    <aside id="favoritesPanel" class="panel" aria-hidden="true" aria-labelledby="favoritesTitle">
+        <div class="panel-header">
+            <h2 id="favoritesTitle">Favorites</h2>
+            <button class="icon-btn" id="closeFavoritesBtn" aria-label="Close favorites">✕</button>
+        </div>
+        <div class="panel-body">
+            <ul id="favoritesList" class="fav-list" aria-live="polite"></ul>
+        </div>
+    </aside>
+
+    <footer class="app-footer">
+        <small>© <span id="year"></span> VibeVerse • Instant affirmations</small>
+    </footer>
+
+    <noscript>
+        <div class="noscript">
+            This app needs JavaScript enabled to show quotes and manage favorites.
+        </div>
+    </noscript>
+
+    <!-- App JS -->
+    <script defer src="js/app.js"></script>
+
+    <!-- Initial configuration passed to JS (adjust folder names to match your structure) -->
+    <script>
+        window.__VIBEVERSE__ = {
+            videoFolder: "assets/Videos", // Your folder uses a capital V (keep consistent)
+            imageFolder: "assets/images",
+            // You can leave arrays empty; JS will try to auto-detect or you can list filenames there.
+            videos: [
+                "2882617-hd_1920_1080_30fps.mp4",
+                "3210473-uhd_3840_2160_25fps.mp4",
+                "3239847-hd_1920_1080_25fps.mp4",
+                "3335569-hd_1920_1080_25fps.mp4",
+                "3987790-hd_1920_1080_24fps.mp4",
+                "4046254-hd_1920_1080_25fps.mp4",
+                "4087433-hd_1920_1080_24fps.mp4",
+                "4441066-hd_1920_1080_25fps.mp4",
+                "6235636-uhd_3840_2160_30fps.mp4",
+                "6981285-hd_1920_1080_25fps.mp4"
+            ],
+
+            images: [
+                // e.g., "bg-1.jpg", "bg-2.jpg"
+            ],
+            // Optional default quotes before user adds any
+            starterQuotes: [
+                { text: "I am aligned with my purpose and act with clarity.", source: "You" },
+                { text: "With every breath, I reset my mind and rise again.", source: "You" },
+                { text: "Small steps today become my strength tomorrow.", source: "—" },
+                { text: "My thoughts shape my world; I choose empowering ones.", source: "—" },
+                { text: "I am open to new energy with every moment.", source: "—" }
+            ]
+        };
+    </script>
+</body>
+
+</html>
